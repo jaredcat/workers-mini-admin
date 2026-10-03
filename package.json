@@ -1,0 +1,66 @@
+{
+  "name": "@codekitties/workers-mini-admin",
+  "version": "0.1.0",
+  "description": "Tiny single-user admin for Cloudflare Workers: cookie/Bearer auth, declarative forms, configurable mount",
+  "type": "module",
+  "license": "MIT",
+  "author": "jaredcat",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jaredcat/workers-mini-admin.git"
+  },
+  "homepage": "https://github.com/jaredcat/workers-mini-admin#readme",
+  "bugs": {
+    "url": "https://github.com/jaredcat/workers-mini-admin/issues"
+  },
+  "keywords": [
+    "cloudflare",
+    "workers",
+    "admin",
+    "auth",
+    "forms"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "embed-css": "node scripts/embed-css.mjs",
+    "embed-css:check": "node scripts/embed-css.mjs --check",
+    "dev": "pnpm run embed-css && wrangler dev --config playground/wrangler.jsonc",
+    "build": "pnpm run embed-css && tsc",
+    "lint": "eslint . && stylelint \"**/*.css\"",
+    "lint:fix": "eslint . --fix && stylelint \"**/*.css\" --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "pnpm run embed-css:check && pnpm run format:check && pnpm run lint && pnpm run build",
+    "prepublishOnly": "pnpm run build",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.12.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-sonarjs": "^4.2.2",
+    "eslint-plugin-unicorn": "^76.0.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.0",
+    "prettier": "^3.9.9",
+    "stylelint": "^17.16.0",
+    "stylelint-config-standard": "^40.0.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.71.0",
+    "wrangler": "^4.146.0"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

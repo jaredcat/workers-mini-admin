@@ -1,0 +1,12 @@
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "workers-mini-admin-playground",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-02",
+  "kv_namespaces": [
+    {
+      "binding": "SETTINGS",
+      "id": "00000000000000000000000000000000",
+    },
+  ],
+}
