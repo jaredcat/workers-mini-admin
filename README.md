@@ -1,4 +1,4 @@
-# `@codekitties/workers-mini-admin`
+# `workers-mini-admin`
 
 Tiny single-user admin for Cloudflare Workers: password cookie / Bearer auth, HTML chrome, declarative forms, and a configurable mount path.
 
@@ -7,7 +7,7 @@ Declare fields (or pass your own HTML). Domain save/load stays in your Worker.
 ## Install
 
 ```bash
-pnpm add @codekitties/workers-mini-admin
+pnpm add workers-mini-admin
 ```
 
 ## Local preview
@@ -24,11 +24,7 @@ Open the URL Wrangler prints, then `/admin`. Login password is `ADMIN_SECRET` fr
 ## Usage
 
 ```ts
-import {
-  createAdmin,
-  parseAdminForm,
-  type Field,
-} from '@codekitties/workers-mini-admin';
+import { createAdmin, parseAdminForm, type Field } from 'workers-mini-admin';
 
 type Env = { ADMIN_SECRET?: string; SETTINGS: KVNamespace };
 

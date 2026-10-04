@@ -14,15 +14,12 @@ importers:
       eslint:
         specifier: ^10.12.0
         version: 10.12.0(supports-color@10.2.2)
+      eslint-config-narwhal:
+        specifier: ^1.0.2
+        version: 1.0.2(eslint@10.12.0(supports-color@10.2.2))
       eslint-config-prettier:
         specifier: ^10.1.8
         version: 10.1.8(eslint@10.12.0(supports-color@10.2.2))
-      eslint-plugin-sonarjs:
-        specifier: ^4.2.2
-        version: 4.2.2(eslint@10.12.0(supports-color@10.2.2))
-      eslint-plugin-unicorn:
-        specifier: ^77.0.0
-        version: 77.0.0(eslint@10.12.0(supports-color@10.2.2))
       husky:
         specifier: ^9.1.7
         version: 9.1.7
@@ -846,6 +843,12 @@ packages:
   escape-string-regexp@4.0.0:
     resolution: {integrity: sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==}
     engines: {node: '>=10'}
+
+  eslint-config-narwhal@1.0.2:
+    resolution: {integrity: sha512-NBaDIRkcgZGplssSTbijguMxabiA9bVm6gdQ0QMIQXJFi1dr5KQ0r9VIL+XD3FT0HnpEg3rqeOI6NxOdxZCdlQ==}
+    engines: {node: '>=26'}
+    peerDependencies:
+      eslint: ^10.12.0
 
   eslint-config-prettier@10.1.8:
     resolution: {integrity: sha512-82GZUjRS0p/jganf6q1rEO25VSoHH0hKPCTrgillPjdI/3bgBhAE1QzHrHTizjpRvy6pGAvKjDJtk2pF9NDq8w==}
@@ -2167,6 +2170,12 @@ snapshots:
   escalade@3.2.0: {}
 
   escape-string-regexp@4.0.0: {}
+
+  eslint-config-narwhal@1.0.2(eslint@10.12.0(supports-color@10.2.2)):
+    dependencies:
+      eslint: 10.12.0(supports-color@10.2.2)
+      eslint-plugin-sonarjs: 4.2.2(eslint@10.12.0(supports-color@10.2.2))
+      eslint-plugin-unicorn: 77.0.0(eslint@10.12.0(supports-color@10.2.2))
 
   eslint-config-prettier@10.1.8(eslint@10.12.0(supports-color@10.2.2)):
     dependencies:

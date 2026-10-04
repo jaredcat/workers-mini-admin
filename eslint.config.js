@@ -1,20 +1,18 @@
 import eslint from '@eslint/js';
+import narwhal from 'eslint-config-narwhal';
 import eslintConfigPrettier from 'eslint-config-prettier/flat';
-import sonarjs from 'eslint-plugin-sonarjs';
-import unicorn from 'eslint-plugin-unicorn';
+import { defineConfig } from 'eslint/config';
 import tseslint from 'typescript-eslint';
 
-export default tseslint.config(
+export default defineConfig(
   { ignores: ['dist/**', 'src/css.ts'] },
   {
     files: ['src/**/*.ts'],
     extends: [
       eslint.configs.recommended,
       tseslint.configs.recommendedTypeChecked,
-      unicorn.configs.recommended,
-      // After Unicorn so a shared rule id would keep the SonarJS setting.
-      sonarjs.configs.recommended,
-      // Last: turn off stylistic rules that conflict with Prettier.
+      ...narwhal,
+      // turn off stylistic rules that conflict with Prettier.
       eslintConfigPrettier,
     ],
     languageOptions: {

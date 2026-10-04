@@ -1,6 +1,6 @@
 # Playground
 
-Local preview of `@codekitties/workers-mini-admin` (login, all field types, CSS).
+Local preview of `workers-mini-admin` (login, all field types, CSS).
 
 ```bash
 cp playground/.dev.vars.example playground/.dev.vars

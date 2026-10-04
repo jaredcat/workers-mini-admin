@@ -1,5 +1,5 @@
 {
-  "name": "@codekitties/workers-mini-admin",
+  "name": "workers-mini-admin",
   "version": "0.1.1",
   "description": "Tiny single-user admin for Cloudflare Workers: cookie/Bearer auth, declarative forms, configurable mount",
   "type": "module",
@@ -46,8 +46,7 @@
     "@eslint/js": "^10.0.1",
     "eslint": "^10.12.0",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-sonarjs": "^4.2.2",
-    "eslint-plugin-unicorn": "^77.0.0",
+    "eslint-config-narwhal": "^1.0.2",
     "husky": "^9.1.7",
     "lint-staged": "^17.6.0",
     "prettier": "^3.9.9",
