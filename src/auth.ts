@@ -1,5 +1,5 @@
 import { html, redirect } from './html.js';
-import { joinBasePath, resolveBasePath } from './path.js';
+import { cookiePathForBase, joinBasePath, resolveBasePath } from './path.js';
 
 export async function hexSha256(secret: string): Promise<string> {
   const buffer = await crypto.subtle.digest(
@@ -107,10 +107,17 @@ export function logoutResponse(options: {
     cookiePath = '/',
     basePath,
   } = options;
-  const redirectTo =
-    options.redirectTo ?? joinBasePath(resolveBasePath(basePath));
-  return redirect(
-    redirectTo,
-    adminAuthCookie('', secureCookie, 0, cookieName, cookiePath),
+  const resolvedBase = resolveBasePath(basePath);
+  const redirectTo = options.redirectTo ?? joinBasePath(resolvedBase, 'login');
+  // Browsers only drop a cookie when Path matches exactly, so clear the
+  // configured path, `/`, and the mount-scoped path (e.g. `/admin`).
+  const paths = new Set<string>([
+    cookiePath,
+    '/',
+    cookiePathForBase(resolvedBase),
+  ]);
+  const cookies = [...paths].map((path) =>
+    adminAuthCookie('', secureCookie, 0, cookieName, path),
   );
+  return redirect(redirectTo, cookies);
 }

@@ -10,18 +10,31 @@ import {
   adminPage,
   html,
   loginPageHtml,
+  type FlashTone,
 } from './html.js';
-import {
-  cookiePathForBase,
-  joinBasePath,
-  normalizeBasePath,
-  relativeToBase,
-} from './path.js';
+import { joinBasePath, normalizeBasePath, relativeToBase } from './path.js';
 
 export type AdminRenderResult = {
   hint?: string;
   flash?: string;
+  flashTone?: FlashTone;
   submitLabel?: string;
+  /**
+  Appended after shared CSS.
+  */
+  extraCss?: string;
+  /**
+  Sets `.page-shell` max-width (e.g. `1200px`).
+  */
+  shellMaxWidth?: string;
+  /**
+  When false, do not wrap `body` / form in `.panel-card` (default true).
+  */
+  wrapBody?: boolean;
+  /**
+  Attributes merged onto `<body>`.
+  */
+  bodyAttrs?: Record<string, string>;
 } & (
   { fields: Field[]; body?: undefined } | { body: string; fields?: undefined }
 );
@@ -51,6 +64,10 @@ export type CreateAdminOptions<Env = unknown> = {
   title: string;
   getSecret: (env: Env) => string | undefined;
   cookieName?: string;
+  /**
+  Cookie Path attribute. Defaults to `/`.
+  */
+  cookiePath?: string;
   render: (context: {
     request: Request;
     env: Env;
@@ -63,9 +80,9 @@ export type CreateAdminOptions<Env = unknown> = {
     form: FormData;
   }) => AdminSaveResult | Promise<AdminSaveResult>;
   /**
-   * Extra routes relative to `basePath`, e.g. `"POST /preview"`.
-   * Run after secret is present; use `context.requireAuth()` for cookie/Bearer checks.
-   */
+  Extra routes relative to `basePath`, e.g. `"POST /preview"`.
+  Run after secret is present; use `context.requireAuth()` for cookie/Bearer checks.
+  */
   routes?: Record<
     string,
     (context: AdminRouteContext<Env>) => Response | Promise<Response>
@@ -108,7 +125,9 @@ export function createAdmin<Env = unknown>(
 ): AdminHandler<Env> {
   const basePath = normalizeBasePath(options.basePath ?? '/admin');
   const cookieName = options.cookieName ?? DEFAULT_COOKIE_NAME;
-  const cookiePath = cookiePathForBase(basePath);
+  // Prefer Path=/ so login/logout always agree. Mount-scoped paths (e.g.
+  // `/admin`) left stale Path=/ cookies that sign-out could not clear.
+  const cookiePath = options.cookiePath ?? '/';
   const homePath = joinBasePath(basePath);
   const known = knownRelativePaths(options.routes);
 
@@ -278,7 +297,12 @@ function renderAdminPage(
     title,
     body,
     flash: page.flash,
+    flashTone: page.flashTone,
     hint: page.hint,
     basePath,
+    extraCss: page.extraCss,
+    shellMaxWidth: page.shellMaxWidth,
+    wrapBody: page.wrapBody,
+    bodyAttrs: page.bodyAttrs,
   });
 }

@@ -29,9 +29,9 @@ export function normalizeBasePath(basePath: string): string {
 }
 
 /**
- * Resolve mount for low-level helpers: omitted → legacy `/admin`;
- * `""` / `"/"` → site root.
- */
+Resolve mount for low-level helpers: omitted → legacy `/admin`;
+`""` / `"/"` → site root.
+*/
 export function resolveBasePath(basePath?: string): string {
   return basePath === undefined ? '/admin' : normalizeBasePath(basePath);
 }
@@ -69,10 +69,10 @@ export function normalizePathname(pathname: string): string {
 }
 
 /**
- * Path relative to the admin mount, or `undefined` if outside the mount.
- * Root mount (`""`): relative is the full pathname (always "under" for known-route checks).
- * Non-root: `undefined` when pathname is not `{base}` or `{base}/…`.
- */
+Path relative to the admin mount, or `undefined` if outside the mount.
+Root mount (`""`): relative is the full pathname (always "under" for known-route checks).
+Non-root: `undefined` when pathname is not `{base}` or `{base}/…`.
+*/
 export function relativeToBase(
   pathname: string,
   basePath: string,

@@ -36,8 +36,12 @@ export {
   adminPage,
   escapeHtml,
   html,
+  isSafeCssLength,
   loginPageHtml,
   redirect,
+  resolveFlashClass,
+  type AdminPageOptions,
+  type FlashTone,
 } from './html.js';
 export {
   cookiePathForBase,

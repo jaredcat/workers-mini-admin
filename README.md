@@ -99,6 +99,26 @@ async render() {
 }
 ```
 
+For multi-panel UIs (wide layout, own cards, extra CSS):
+
+```ts
+async render() {
+  return {
+    shellMaxWidth: '1200px',
+    wrapBody: false,
+    extraCss: `.layout { display: grid; … }`,
+    bodyAttrs: { 'data-deployed-origin': origin },
+    body: `…`,
+  };
+}
+```
+
+- `shellMaxWidth` — simple CSS length for `.page-shell` (e.g. `1200px`)
+- `wrapBody: false` — skip the default `.panel-card` wrapper
+- `extraCss` — appended after shared styles
+- `bodyAttrs` — attributes on `<body>` (escaped)
+- `flashTone` — `'ok' | 'warn' | 'error'` (auto: `Error:` → error, `failed` → warn)
+
 ### Extra routes
 
 For preview/upload endpoints under the mount:
@@ -130,7 +150,7 @@ You can still wire auth and chrome yourself (`isAuthenticated`, `loginResponse`,
 
 - `adminDisabledResponse(message?)` — optional custom 503 body (default mentions `ADMIN_SECRET`)
 - `cookieName` on auth helpers and `createAdmin` — defaults to `admin_auth`
-- `cookiePath` on `loginResponse` / `logoutResponse` — `createAdmin` sets this from `basePath`
+- `cookiePath` on `loginResponse` / `logoutResponse` / `createAdmin` — defaults to `/`. Logout clears `/`, the configured path, and the mount path so leftover cookies cannot stick around.
 
 ## API
 
