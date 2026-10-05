@@ -1,13 +1,16 @@
 import { escapeHtml } from './escape.js';
 
-export type FieldOption = { value: string; label: string };
+export interface FieldOption {
+  value: string;
+  label: string;
+}
 
-type FieldBase = {
+interface FieldBase {
   label?: string;
   hint?: string;
   required?: boolean;
   placeholder?: string;
-};
+}
 
 export type TextField = FieldBase & {
   type: 'text' | 'url' | 'password';
@@ -54,17 +57,17 @@ export type CheckboxField = FieldBase & {
   value?: string;
 };
 
-export type FieldsetField = {
+export interface FieldsetField {
   type: 'fieldset';
   legend: string;
   hint?: string;
   fields: Field[];
-};
+}
 
-export type HtmlField = {
+export interface HtmlField {
   type: 'html';
   html: string;
-};
+}
 
 export type Field =
   | TextField
@@ -186,8 +189,8 @@ function renderSelect(field: SelectField): string {
 function renderNumber(field: NumberField): string {
   const id = field.name;
   const label = field.label ? labelHtml(id, field.label, field.hint) : '';
-  const min = field.min === undefined ? '' : ` min="${field.min}"`;
-  const max = field.max === undefined ? '' : ` max="${field.max}"`;
+  const min = field.min === undefined ? '' : ` min="${String(field.min)}"`;
+  const max = field.max === undefined ? '' : ` max="${String(field.max)}"`;
   const step =
     field.step === undefined ? '' : ` step="${escapeHtml(String(field.step))}"`;
   const placeholder = field.placeholder

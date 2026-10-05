@@ -106,7 +106,7 @@ function bodyAttributesToString(attributes?: Record<string, string>): string {
   return out;
 }
 
-export type AdminPageOptions = {
+export interface AdminPageOptions {
   title: string;
   body: string;
   flash?: string;
@@ -134,7 +134,7 @@ export type AdminPageOptions = {
   Attributes merged onto `<body>` (values escaped).
   */
   bodyAttrs?: Record<string, string>;
-};
+}
 
 export function adminPage(options: AdminPageOptions): string {
   const {

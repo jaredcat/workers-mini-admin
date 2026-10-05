@@ -29,10 +29,10 @@ export function adminAuthCookie(
   isSecure: boolean,
   maxAge: number,
   cookieName: string = DEFAULT_COOKIE_NAME,
-  path: string = '/',
+  path = '/',
 ): string {
   const secureFlag = isSecure ? 'Secure; ' : '';
-  return `${cookieName}=${token}; HttpOnly; ${secureFlag}SameSite=Lax; Max-Age=${maxAge}; Path=${path}`;
+  return `${cookieName}=${token}; HttpOnly; ${secureFlag}SameSite=Lax; Max-Age=${String(maxAge)}; Path=${path}`;
 }
 
 export async function isAuthenticated(
@@ -48,7 +48,7 @@ export async function isAuthenticated(
     }
   }
 
-  const cookie = request.headers.get('Cookie') || '';
+  const cookie = request.headers.get('Cookie') ?? '';
   const match = new RegExp(
     String.raw`(?:^|;\s*)${escapeRegExp(cookieName)}=([^;]+)`,
   ).exec(cookie);

@@ -1,19 +1,17 @@
-import eslint from '@eslint/js';
 import narwhal from 'eslint-config-narwhal';
-import eslintConfigPrettier from 'eslint-config-prettier/flat';
 import { defineConfig } from 'eslint/config';
-import tseslint from 'typescript-eslint';
 
 export default defineConfig(
   { ignores: ['dist/**', 'src/css.ts'] },
   {
     files: ['src/**/*.ts'],
     extends: [
-      eslint.configs.recommended,
-      tseslint.configs.recommendedTypeChecked,
-      ...narwhal,
-      // turn off stylistic rules that conflict with Prettier.
-      eslintConfigPrettier,
+      ...narwhal({
+        typechecked: true,
+        strict: true,
+        stylistic: true,
+        prettier: true,
+      }),
     ],
     languageOptions: {
       parserOptions: {

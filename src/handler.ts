@@ -39,11 +39,11 @@ export type AdminRenderResult = {
   { fields: Field[]; body?: undefined } | { body: string; fields?: undefined }
 );
 
-export type AdminSaveResult = {
+export interface AdminSaveResult {
   flash?: string;
-};
+}
 
-export type AdminRouteContext<Env = unknown> = {
+export interface AdminRouteContext<Env = unknown> {
   request: Request;
   env: Env;
   url: URL;
@@ -54,9 +54,9 @@ export type AdminRouteContext<Env = unknown> = {
   */
   path: string;
   requireAuth: () => Promise<Response | undefined>;
-};
+}
 
-export type CreateAdminOptions<Env = unknown> = {
+export interface CreateAdminOptions<Env = unknown> {
   /**
   Mount path. `""` or `"/"` = site root; default `"/admin"`.
   */
@@ -88,11 +88,11 @@ export type CreateAdminOptions<Env = unknown> = {
     (context: AdminRouteContext<Env>) => Response | Promise<Response>
   >;
   disabledMessage?: string;
-};
+}
 
-export type AdminHandler<Env = unknown> = {
+export interface AdminHandler<Env = unknown> {
   fetch: (request: Request, env: Env) => Promise<Response | undefined>;
-};
+}
 
 function isSecureCookie(request: Request): boolean {
   return new URL(request.url).protocol === 'https:';
