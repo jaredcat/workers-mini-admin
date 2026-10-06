@@ -20,27 +20,11 @@ export default defineConfig(
       },
     },
     rules: {
-      // `strict` already sets `noImplicitAny`. These reject explicit `any`
-      // and any value that flows through as `any`.
-      '@typescript-eslint/no-explicit-any': 'error',
-      '@typescript-eslint/no-unsafe-argument': 'error',
-      '@typescript-eslint/no-unsafe-assignment': 'error',
-      '@typescript-eslint/no-unsafe-call': 'error',
-      '@typescript-eslint/no-unsafe-member-access': 'error',
-      '@typescript-eslint/no-unsafe-return': 'error',
-      '@typescript-eslint/no-unsafe-unary-minus': 'error',
-      // `String#match()`: SonarJS wants `RegExp#exec()`; Unicorn wants `RegExp#test()`.
+      // Sonar prefers RegExp#exec; Unicorn prefers RegExp#test.
       'unicorn/prefer-regexp-test': 'off',
-      // Unicorn suggests `switch` from 3 cases up. SonarJS rejects smaller switches.
-      'unicorn/prefer-switch': ['error', { minimumCases: 3 }],
       'unicorn/name-replacements': [
         'error',
-        {
-          allowList: {
-            Env: true,
-            env: true,
-          },
-        },
+        { allowList: { Env: true, env: true } },
       ],
       'unicorn/consistent-boolean-name': [
         'error',

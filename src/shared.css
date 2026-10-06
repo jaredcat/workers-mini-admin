@@ -232,6 +232,42 @@ legend {
   margin: 0;
 }
 
+.list-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.list-field > legend {
+  margin-bottom: 0.25rem;
+}
+
+.list-item {
+  margin-top: 0;
+}
+
+.list-item > label:first-of-type,
+.list-item > .row:first-child label {
+  margin-top: 0;
+}
+
+.list-item-actions {
+  margin-top: 0.75rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.list-add {
+  align-self: flex-start;
+}
+
+.list-add:disabled,
+.list-item-remove:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .login-shell {
   max-width: 24rem;
   margin: 0 auto;

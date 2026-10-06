@@ -66,6 +66,37 @@ export default {
 };
 ```
 
+### Declarative fields
+
+Supported field types: `text`, `url`, `password`, `number`, `textarea`, `select`, `radio`, `checkbox`, `fieldset`, `row`, `list`, and trusted `html`.
+
+**Hints:** `hint` is escaped plain text. Use `hintHtml` for trusted HTML (e.g. `<code>`). If both are set, `hintHtml` wins. For arbitrary in-form markup, use `{ type: 'html', html: '…' }`.
+
+**Scalar attrs:** text/url/password support `pattern`, `maxlength`, `minlength`, `autocomplete`, and `spellcheck` (text only). Textareas support `maxlength`, `minlength`, `autocomplete`, and `spellcheck`. Numbers keep `min` / `max` / `step` and also accept `autocomplete`.
+
+**Compact rows:** `{ type: 'row', fields: […] }` lays short fields side-by-side (reuses `.row` CSS).
+
+**Repeatable lists:**
+
+```ts
+{
+  type: 'list',
+  name: 'feeds',
+  legend: 'Feed sources',
+  minItems: 1,
+  maxItems: 8,
+  itemFields: [
+    { type: 'text', name: 'label', label: 'Label', required: true },
+    { type: 'url', name: 'url', label: 'URL', required: true },
+  ],
+  values: [{ label: 'Example', url: 'https://example.com/feed.xml' }],
+}
+```
+
+Form control names are `listName_index_fieldName` (e.g. `feeds_0_url`). `parseAdminForm` returns `values.feeds` as an array of row objects. A small add/remove script is injected automatically when the form contains a list.
+
+Stay on Fields for login + KV settings + repeatable lists. Use `body` / `routes` / `extraCss` for live previews and other client-heavy UIs.
+
 ### Mount path / reverse proxy
 
 `basePath` defaults to `"/admin"`. Use `""` or `"/"` when the admin is the site root (e.g. `admin.example.com`):
@@ -153,8 +184,8 @@ You can still wire auth and chrome yourself (`isAuthenticated`, `loginResponse`,
 | Export                               | Role                                                 |
 | ------------------------------------ | ---------------------------------------------------- |
 | `createAdmin`                        | Auth router + form page with configurable `basePath` |
-| `adminForm` / `Field`                | Declarative form HTML                                |
-| `formText` / `parseAdminForm`        | FormData helpers                                     |
+| `adminForm` / `Field`                | Declarative form HTML (incl. `list`, `row`)          |
+| `formText` / `parseAdminForm`        | FormData helpers (lists → row arrays)                |
 | `escapeHtml`                         | Safe HTML text interpolation                         |
 | `hexSha256` / `timingSafeEqual`      | Cookie token helpers                                 |
 | `isAuthenticated`                    | Cookie or `Authorization: Bearer` check              |

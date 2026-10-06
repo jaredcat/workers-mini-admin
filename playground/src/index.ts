@@ -5,16 +5,26 @@ type Env = {
   SETTINGS: KVNamespace;
 };
 
+type FeedRow = {
+  label: string;
+  url: string;
+};
+
 type DemoSettings = {
   title: string;
   siteUrl: string;
   apiToken: string;
+  outputFilename: string;
+  day: string;
+  month: string;
+  year: string;
   limit: string;
   notes: string;
   theme: string;
   mode: string;
   enabled: boolean;
   nested: string;
+  feeds: FeedRow[];
 };
 
 const SETTINGS_KEY = 'demo';
@@ -23,20 +33,24 @@ const defaultSettings: DemoSettings = {
   title: 'Playground',
   siteUrl: 'https://example.com',
   apiToken: '',
+  outputFilename: 'combined.xml',
+  day: '6',
+  month: '10',
+  year: '2026',
   limit: '10',
   notes: 'Edit fields, save, and reload to confirm KV persistence.',
   theme: 'system',
   mode: 'live',
   enabled: true,
   nested: '',
+  feeds: [
+    { label: 'Example', url: 'https://example.com/feed.xml' },
+    { label: 'Cloudflare', url: 'https://blog.cloudflare.com/rss/' },
+  ],
 };
 
 function fieldsFrom(settings: DemoSettings): Field[] {
   return [
-    {
-      type: 'html',
-      html: '<p class="hint">All field types for UI development. Password for login is <code>ADMIN_SECRET</code> from <code>playground/.dev.vars</code>.</p>',
-    },
     {
       type: 'text',
       name: 'title',
@@ -44,6 +58,8 @@ function fieldsFrom(settings: DemoSettings): Field[] {
       value: settings.title,
       required: true,
       placeholder: 'Site title',
+      hintHtml:
+        'Password for login is <code>ADMIN_SECRET</code> from <code>playground/.dev.vars</code>.',
     },
     {
       type: 'url',
@@ -51,6 +67,7 @@ function fieldsFrom(settings: DemoSettings): Field[] {
       label: 'Site URL',
       value: settings.siteUrl,
       placeholder: 'https://…',
+      autocomplete: 'url',
     },
     {
       type: 'password',
@@ -59,6 +76,49 @@ function fieldsFrom(settings: DemoSettings): Field[] {
       value: settings.apiToken,
       hint: 'Stored in local KV only.',
       placeholder: '••••••••',
+      autocomplete: 'off',
+    },
+    {
+      type: 'text',
+      name: 'outputFilename',
+      label: 'Output filename',
+      value: settings.outputFilename,
+      pattern: '^[A-Za-z0-9._-]+\\.xml$',
+      maxlength: 64,
+      hintHtml:
+        'Must end in <code>.xml</code> (letters, digits, <code>._-</code>).',
+    },
+    {
+      type: 'row',
+      fields: [
+        {
+          type: 'number',
+          name: 'day',
+          label: 'Day',
+          value: settings.day,
+          min: 1,
+          max: 31,
+          step: 1,
+        },
+        {
+          type: 'number',
+          name: 'month',
+          label: 'Month',
+          value: settings.month,
+          min: 1,
+          max: 12,
+          step: 1,
+        },
+        {
+          type: 'number',
+          name: 'year',
+          label: 'Year',
+          value: settings.year,
+          min: 2000,
+          max: 2100,
+          step: 1,
+        },
+      ],
     },
     {
       type: 'number',
@@ -75,6 +135,8 @@ function fieldsFrom(settings: DemoSettings): Field[] {
       label: 'Notes',
       value: settings.notes,
       placeholder: 'Free-form notes',
+      maxlength: 2000,
+      spellcheck: true,
     },
     {
       type: 'select',
@@ -105,6 +167,34 @@ function fieldsFrom(settings: DemoSettings): Field[] {
       hint: 'Toggle feature flag',
     },
     {
+      type: 'list',
+      name: 'feeds',
+      legend: 'Feed sources',
+      hintHtml:
+        'Repeatable rows. Form names look like <code>feeds_0_url</code>.',
+      minItems: 1,
+      maxItems: 8,
+      addLabel: 'Add feed',
+      removeLabel: 'Remove',
+      itemFields: [
+        {
+          type: 'text',
+          name: 'label',
+          label: 'Label',
+          placeholder: 'Name',
+          required: true,
+        },
+        {
+          type: 'url',
+          name: 'url',
+          label: 'Feed URL',
+          placeholder: 'https://…/rss',
+          required: true,
+        },
+      ],
+      values: settings.feeds,
+    },
+    {
       type: 'fieldset',
       legend: 'Nested fieldset',
       hint: 'Fields inside a fieldset',
@@ -133,6 +223,20 @@ async function loadSettings(env: Env): Promise<DemoSettings> {
   }
 }
 
+function parseFeeds(value: unknown): FeedRow[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+  return value.map((row) => {
+    const record =
+      row && typeof row === 'object' ? (row as Record<string, unknown>) : {};
+    return {
+      label: String(record.label ?? ''),
+      url: String(record.url ?? ''),
+    };
+  });
+}
+
 const admin = createAdmin<Env>({
   basePath: '/admin',
   title: 'workers-mini-admin playground',
@@ -152,12 +256,17 @@ const admin = createAdmin<Env>({
       title: String(values.title ?? previous.title),
       siteUrl: String(values.siteUrl ?? previous.siteUrl),
       apiToken: String(values.apiToken ?? previous.apiToken),
+      outputFilename: String(values.outputFilename ?? previous.outputFilename),
+      day: String(values.day ?? previous.day),
+      month: String(values.month ?? previous.month),
+      year: String(values.year ?? previous.year),
       limit: String(values.limit ?? previous.limit),
       notes: String(values.notes ?? previous.notes),
       theme: String(values.theme ?? previous.theme),
       mode: String(values.mode ?? previous.mode),
       enabled: Boolean(values.enabled),
       nested: String(values.nested ?? previous.nested),
+      feeds: parseFeeds(values.feeds),
     };
     await env.SETTINGS.put(SETTINGS_KEY, JSON.stringify(next));
     return { flash: 'Saved.' };
